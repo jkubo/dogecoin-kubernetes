@@ -1,0 +1,50 @@
+### dogecoin.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: dogecoin
+  name: dogecoin-core-deployment
+  labels:
+    app: dogecoin-core-app
+    tier: dogecoin
+spec:
+  selector:
+    matchLabels:
+      app: dogecoin-core-app
+      tier: dogecoin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dogecoin-core-app
+        tier: dogecoin
+    spec:
+      volumes:
+      - name: dogecoin-core
+        persistentVolumeClaim:
+          claimName: dogecoin-core
+      containers:
+      - name: dogecoin-core
+        image: "jkubo/dogecoin-core:latest"
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: dogecoin-core
+          mountPath: "/home/dogecoin/.dogecoin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: dogecoin
+  name: dogecoin-core-service
+  labels:
+    tier: dogecoin
+spec:
+  selector:
+    app: dogecoin-core-app
+    tier: dogecoin
+  ports:
+  - port: 80
+    targetPort: 8332
+    protocol: TCP
+    name: dogecoin-core-port
