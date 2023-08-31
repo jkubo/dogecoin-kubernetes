@@ -4,7 +4,7 @@ Configs for running Dogecoin full node in Kubernetes
 Useful commands:
 
 Deployment
-- `kubernetes create -f any/<FILE_NAME>.yml`
+- `kubectl create -f any/<FILE_NAME>.yml`
 - `kubectl delete -f any/<FILE_NAME>.yml`
 
 General
